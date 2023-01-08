@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  mysqlservice:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    container_name: mysql-container1
+    networks:
+      - user-net
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
+  user-authentication-service:
+    container_name: user-authentication-service
+    build: ./
+    networks:
+      - user-net
+    ports:
+      - "8085:8085"
+    depends_on:
+      - mysqlservice
+    restart: always
+
+networks:
+  user-net:
+    driver: bridge
